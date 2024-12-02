@@ -31,18 +31,32 @@ public class Bombas : MonoBehaviour
         // Espera el tiempo de explosión
         yield return new WaitForSeconds(tiempoExplosion);
 
-        // Detecta las paredes destruibles dentro del radio de explosión
+        // Detecta los objetos destruidos dentro del radio de explosión
         Collider[] objetosAfectados = Physics.OverlapSphere(bomba.transform.position, radioExplosion);
 
         foreach (Collider objeto in objetosAfectados)
         {
             if (objeto.CompareTag("Destruibles"))
             {
-                Destroy(objeto.gameObject); // Destruye las paredes con el tag "Destruibles"
+                // Desactiva el objeto en lugar de destruirlo
+                objeto.gameObject.SetActive(false);
+
+                // Inicia la coroutine para reaparecer el objeto con un tiempo de espera aleatorio
+                StartCoroutine(ReaparecerObjeto(objeto.gameObject));
             }
         }
 
         // Destruye la bomba después de la explosión
         Destroy(bomba);
+    }
+
+    private IEnumerator ReaparecerObjeto(GameObject objeto)
+    {
+        // Espera un tiempo aleatorio entre 5 y 10 segundos antes de reactivar el objeto usando UnityEngine.Random
+        float tiempoEspera = UnityEngine.Random.Range(10f, 20f);
+        yield return new WaitForSeconds(tiempoEspera);
+
+        // Reactiva el objeto
+        objeto.SetActive(true);
     }
 }
