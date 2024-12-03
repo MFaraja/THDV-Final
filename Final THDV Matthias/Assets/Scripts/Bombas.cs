@@ -11,8 +11,8 @@ public class Bombas : MonoBehaviour
 
     void Update()
     {
-        // Detectar el clic izquierdo para colocar una bomba si no hay una activa
-        if (Input.GetMouseButtonDown(0) && bombaActiva == null)
+        // Detectar la tecla E para colocar una bomba si no hay una activa
+        if (Input.GetKeyDown(KeyCode.E) && bombaActiva == null)
         {
             ColocarBomba();
         }
