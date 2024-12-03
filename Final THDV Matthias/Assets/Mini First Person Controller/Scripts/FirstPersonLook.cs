@@ -9,5 +9,18 @@ public class FirstPersonLook : MonoBehaviour
 
         // Asegurar que la cámara esté mirando siempre hacia abajo.
         transform.rotation = Quaternion.Euler(90, 0, 0);
+
+        // Desactivar cualquier componente que permita rotar la cámara.
+        Camera camera = GetComponent<Camera>();
+        if (camera != null)
+        {
+            camera.transform.rotation = Quaternion.Euler(90, 0, 0);
+        }
+    }
+
+    void Update()
+    {
+        // No permitimos que la cámara rote de ninguna forma.
+        transform.rotation = Quaternion.Euler(90, 0, 0);
     }
 }

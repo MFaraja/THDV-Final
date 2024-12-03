@@ -11,11 +11,10 @@ public class FirstPersonMovement : MonoBehaviour
     public float runSpeed = 9;
     public KeyCode runningKey = KeyCode.LeftShift;
 
-    Rigidbody rigidbody;
+    private Rigidbody rigidbody;
+
     /// <summary> Functions to override movement speed. Will use the last added override. </summary>
     public List<System.Func<float>> speedOverrides = new List<System.Func<float>>();
-
-
 
     void Awake()
     {
@@ -36,9 +35,14 @@ public class FirstPersonMovement : MonoBehaviour
         }
 
         // Get targetVelocity from input.
-        Vector2 targetVelocity =new Vector2( Input.GetAxis("Horizontal") * targetMovingSpeed, Input.GetAxis("Vertical") * targetMovingSpeed);
+        // Only allow forward/backward movement based on a fixed direction (e.g., forward in the world).
+        Vector3 forwardDirection = transform.forward;
+        forwardDirection.y = 0; // Ensure the movement is only on the XZ plane
+        forwardDirection.Normalize();
 
-        // Apply movement.
-        rigidbody.velocity = transform.rotation * new Vector3(targetVelocity.x, rigidbody.velocity.y, targetVelocity.y);
+        Vector3 targetVelocity = forwardDirection * (Input.GetAxis("Vertical") * targetMovingSpeed);
+
+        // Apply movement while preserving the Y component of the velocity.
+        rigidbody.velocity = new Vector3(targetVelocity.x, rigidbody.velocity.y, targetVelocity.z);
     }
 }
